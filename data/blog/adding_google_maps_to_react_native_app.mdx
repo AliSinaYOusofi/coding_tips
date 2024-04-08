@@ -1,0 +1,344 @@
+---
+title: Adding ads to react-native expo app
+date: '04-09-2024'
+tags: ['react-native', 'admob']
+draft: false
+summary: In this blog we will learn how we can add google mobile ads to our react-native app.
+---
+
+# What is admob
+The AdMob module allows you to display adverts to your users. For displaying ads you need [google ad mob account](https://admob.google.com/home/get-started/).
+Google admob supports the following ads:
+
+1. Full screen [interstitial ads](#Interstitial-Ads)
+2. Full screen [rewarded ads](#Rewarded)
+3. Component based [banner ads](#Banner)
+4. Full Screen [App open ads](#AppOpenAds)
+
+# Installation
+Install by running the following command:
+
+for yarn
+```
+yarn add react-native-google-mobile-ads
+```
+for npm
+```
+npm add react-native-google-mobile-ads
+```
+
+## If you are using static frameworks
+To use static frameworks on iOS with react-native-firebase v15 and higher, which requires use_frameworks!, you need to add $RNGoogleMobileAdsAsStaticFramework = true to the targets in your Podfile. This variable ensures that static frameworks are correctly linked when using static linkage in your Podfile.
+
+To enable static frameworks on expo merge the following code to your app.json:
+```
+{
+  "expo": {
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
+  }
+}
+
+```
+
+## Setting up google admob
+Before you can display ads you need [Google AdMob Account](https://admob.google.com/home/get-started/).
+When logged in under the "Apps" menu item, create or choose an existing Android/iOS app. Each platform has a unqiue account ID which you need to add to your project.
+
+Note: If you attempt to build your app without a valid Apple ID in app.json or app.config.json this will cause the app to crash on start or even fail to build.
+
+Under the "App settings" menu item, you can find the "App ID":
+
+![AddMobIDAccountImage](https://prismic-io.s3.amazonaws.com/invertase%2F52dd6900-108c-47a6-accb-699fde963b99_new+project+%2813%29.jpg)
+
+Within the root of your React Native project, open the app.json or (if using Expo) app.config.js file and add the android_app_id & ios_app_id keys with the IDs from the Google AdMob console:
+
+app.json:
+```
+// <project-root>/app.json
+{
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+  }
+}
+```
+
+app.config.json
+```
+// <project-root>/app.config.js
+module.exports = {
+  'react-native-google-mobile-ads': {
+    android_app_id: 'ca-app-pub-xxxxxxxx~xxxxxxxx',
+    ios_app_id: 'ca-app-pub-xxxxxxxx~xxxxxxxx',
+  },
+};
+```
+For app.json make sure react-native-google-mobile-ads is outside the expo block.
+
+It must look like this:
+
+app.json:
+```
+{
+  "expo": {
+    // ...
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+  }
+}
+
+```
+app.config.json:
+
+```
+module.exports = {
+  expo: {
+    // ...
+  },
+  'react-native-google-mobile-ads': {
+    android_app_id: 'ca-app-pub-xxxxxxxx~xxxxxxxx',
+    ios_app_id: 'ca-app-pub-xxxxxxxx~xxxxxxxx',
+  },
+};
+```
+
+⚠️Note: react-native-mobile-ads contains custom natiave code which is not supported on Expo Go.
+
+Since Expo Go does not support native code we will need to build a development build of our app with [eas](https://docs.expo.dev/build/setup/).
+
+Install EAS:
+
+```
+npm install -g eas-cli
+```
+
+Login to Expo:
+```
+eas login
+```
+
+Confgiure project:
+```
+eas build:configure
+```
+
+Create a development build for android:
+```
+eas build -p android --profile development
+```
+Create a development build for iOS:
+```
+eas build -p ios --profile development
+```
+
+After building your app install it on your device.
+
+Open the installed app on your device and on your terminal start a server by running: ``` npx expo start ``` and scan the QR code and we are good ✅ to display ads.
+
+# Initialize the Google Mobile Ads SDK
+After starting the development server we have to initialize the adMob SDK (which returns a promise) only once in our app.
+
+```
+import mobileAds from 'react-native-google-mobile-ads';
+
+mobileAds()
+    .initialize()
+    .then(adapterStatuses => {
+        console.log("adMob inited")
+});
+
+```
+
+## Setting the ad ID
+For development purposes you must use test ids from the google-mobile-ads module. However for production the ID from the Google AdMob dashboard under "Ad units" should be used
+```
+import { RewardedAd, TestIds } from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+    keywords: ['fashion', 'clothing'],
+});
+```
+# 1. Interstitial Ads
+
+Interstitial ads are full-screen ads that cover the interface of an app until closed by the user. 
+
+They are programmatically loaded and shown at a suitable point during the app's flow, such as after completing a level in a game. 
+
+To create a new interstitial ad, use the createForAdRequest method from the InterstitialAd class, specifying the Ad Unit ID. For testing, a Test ID can be used, but for production, the ID from the Google AdMob dashboard should be used.
+
+```
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react-native';
+import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.INTERSTITIAL : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
+const interstitial = InterstitialAd.createForAdRequest(adUnitId, {
+    keywords: ['fashion', 'clothing'],
+});
+
+function App() {
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const unsubscribe = interstitial.addAdEventListener(AdEventType.LOADED, () => {
+        setLoaded(true);
+        });
+
+        // Start loading the interstitial straight away
+        interstitial.load();
+
+        // Unsubscribe from events on unmount
+        return unsubscribe;
+    }, []);
+
+    // No advert ready to show yet
+    if (!loaded) {
+        return null;
+    }
+
+    return (
+        <Button
+            title="Show Interstitial"
+            onPress={() => {
+                interstitial.show();
+            }
+            }
+        />
+    );
+}
+
+```
+
+The code subscribes to interstitial events using ```addAdEventListener()``` and immediately loads a new advertisement from the network using ```load()```. When the advertisement is available, local state is set to re-render the component, showing a Button. When the Button is pressed, the ```show()``` method on the interstitial instance is called, displaying the advertisement over the application.
+
+# 2. Rewarded Ads
+Rewarded Ads are full-screen ads displayed in an app until closed by the user. The content of a rewarded ad is managed through the Google AdMob dashboard.
+
+Rewarded ads offer incentives for users to complete actions within the ad, such as watching a video or submitting a form, by rewarding them with something, like in-game currency.
+
+Rewarded ad example:
+```
+import React, { useEffect, useState } from 'react';
+import { Button } from 'react-native';
+import { RewardedAd, RewardedAdEventType, TestIds } from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.REWARDED : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
+const rewarded = RewardedAd.createForAdRequest(adUnitId, {
+  keywords: ['fashion', 'clothing'],
+});
+
+function App() {
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const unsubscribeLoaded = rewarded.addAdEventListener(RewardedAdEventType.LOADED, () => {
+        setLoaded(true);
+        });
+        const unsubscribeEarned = rewarded.addAdEventListener(
+        RewardedAdEventType.EARNED_REWARD,
+        reward => {
+            console.log('User earned reward of ', reward);
+        },
+        );
+
+        // Start loading the rewarded ad straight away
+        rewarded.load();
+
+        // Unsubscribe from events on unmount
+        return () => {
+        unsubscribeLoaded();
+        unsubscribeEarned();
+        };
+    }, []);
+
+    // No advert ready to show yet
+    if (!loaded) {
+        return null;
+    }
+
+    return (
+        <Button
+        title="Show Rewarded Ad"
+        onPress={() => {
+            rewarded.show();
+        }}
+        />
+    );
+}
+
+```
+
+The code subscribes to rewarded ad events using ```addAdEventListener()``` and immediately loads a new advertisement from the network using ```load()```. When the advertisement is available, local state is set to re-render the component, showing a Button. Pressing the Button calls the ```show()``` method on the rewarded ad instance, displaying the advertisement over the application.
+
+# 3. Banner Ads (component)
+
+Banner ads are smaller, partial advertisements that can be integrated into your existing application. Unlike Interstitial and Rewarded Ads, banners occupy a limited area of the application, displaying an ad within that area without disrupting the user experience.
+
+The module exposes a BannerAd component. The unitId and size props are required to display a banner:
+
+```
+import React from 'react';
+import { BannerAd, BannerAdSize, TestIds } from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.ADAPTIVE_BANNER : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
+function App() {
+  return (
+    <BannerAd
+      unitId={adUnitId}
+      size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+    />
+  );
+}
+```
+
+BannerAd props:
+
+1. onAdClosed
+2. onAdFailedToLoad
+3. onAdLeftApplication
+4. onAdOpened
+5. onPaid 
+
+
+# 4. App open ads
+App open ads are a specialized ad format for monetizing app load screens. Users can close these ads at any time, and they are typically displayed when users bring the app to the foreground.
+
+You have to make sure that you preload a app open ad before displaying the ad.
+
+```
+import { AppOpenAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
+
+const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-xxxxxxxxxxxxx/yyyyyyyyyyyyyy';
+
+const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, {
+    keywords: ['fashion', 'clothing'],
+});
+
+// Preload an app open ad
+appOpenAd.load();
+
+// Show the app open ad when user brings the app to the foreground.
+appOpenAd.show();
+
+```
+# Conclusion
+Ads are a great way to monetize your application. I know the first setup can be a little time consuming but once you set it up it will no longer take much time.
+I hope this blog helped you learn about ads and displaying them on your applications.
+
+➡️ You can also [display ads via hooks](https://docs.page/invertase/react-native-google-mobile-ads/displaying-ads-hook)
