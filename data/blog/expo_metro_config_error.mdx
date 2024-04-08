@@ -1,0 +1,85 @@
+---
+title: ExpoMetroConfig.loadAsync is not a function
+date: '04-08-2024'
+tags: ['react-native', 'expo', 'bugs']
+draft: false
+summary: Encountering the "ExpoMetroConfig.loadAsync is not a function" error in your React Native project can be frustrating, but it's not insurmountable.
+---
+
+# ExpoMetroConfig.loadAsync is not a function
+When encountering the error "ExpoMetroConfig.loadAsync is not a function" in your React Native project, it can be frustrating and time-consuming to troubleshoot. However, it's essential to understand that this issue is not insurmountable.
+Here some solutions that migh help you resolve this issue
+
+## 1. Using expo-doctor
+To make sure that your project is working properly one of the easiest way to do it by running the command npx expo-doctor.
+If you don't have it installed you can use the following(make sure your are on the root directory of your project):
+```
+npm i expo-doctor
+```
+Expo-doctor will run 11 checks on you project. While running the command it will point out where your project has issues and gives you suggesstion about how to resolve those issuess.
+
+## 2. npx expo-start not expo start
+Make sure you use npx expo-start and not expo start since the have different effects. 
+    #### expo-start 
+is used when you have the Expo CLI install globally on your system. When you run expo start it will start the development server for the project in current directory. So it uses globally installed Expo CLI to run the project.
+
+#### npx expo start 
+is used when you don't have the Expo CLI installed globally but you have as dependency in your project. Npx expo start will look for Expo CLI in your porject's node_modules and uses that to start the development server.
+
+if you have the Expo CLI installed globally, you can use expo start to start the development server. If you don't have it installed globally, you can use npx expo start to start the server using the locally installed Expo CLI.
+
+## 3. Misconfiguration and Conflict
+One common problem is misconfiguration that can cause errors during the build process.
+Here are steps to resolve such issues
+
+#### 3. 1 Uninstall @expo/metro-config and Delete metro.conf.js directory
+If you're experiencing Metro Config-related problems, one approach is to uninstall the @expo/metro-config package and delete the metro.conf.js folder:
+```
+npm uninstall @expo/metro-config
+rm -rf metro.conf.js
+```
+
+This will remove the @expo/metro-config package from your project and delete any existing metro.conf.js configuration file.
+
+#### 3.2 Delete package-lock.json and node_modules
+Next, delete the package-lock.json file and the node_modules folder:
+```
+rm package-lock.json
+rm -rf node_modules
+
+```
+
+### 3.3 Reinstall Dependencies
+With the problematic package and configuration file removed, you can now reinstall your project dependencies:
+```
+npm install
+```
+This command will install the necessary packages, including a fresh copy of @expo/metro-config, without the conflicts that may have caused the issue.
+
+## 4. Remove cache files
+Sometimes the cached files can also cuase this error. For cleaning cache files and temporary files your can use [watchman](https://facebook.github.io/watchman).
+For installing watcman:
+
+On windows:
+```
+PS C:\> choco install watchman
+```
+
+On Mac:
+```
+$ brew update
+$ brew install watchman
+```
+
+For linux distributions see [this](https://facebook.github.io/watchman/docs/install).
+
+After installing watchman you can clear cache file using the following command:
+```
+watchman watch-del-all && rm -rf $TMPDIR/react-native-packager-cache-* && rm -rf $TMPDIR/metro-bundler-cache-* && rm -rf node_modules/ && npm cache clean --force && npm install && npm start -- --reset-cache
+```
+
+If these solutions did not resolve the issues then feel free to open an issue on their github.
+You can open a new issue by clicking [here](https://github.com/expo/expo/issues) since they have a great community you will get answers instantly.
+
+## Conclusion
+I 🤞 hope the above solutions resolved the issue. If these solutions did not resolve the issues then feel free to open an issue on their github. You can open a new issue by clicking here since they have a great community you will get answers instantly.
