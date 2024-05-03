@@ -2,6 +2,7 @@
 const siteMetadata = {
   title: 'CodeAndBugs',
   author: 'Ali Sina Yousofi',
+  description: "Ali's coding tips. I write about my coding journey and share my tips with you.",
   headerTitle: 'CodeAndBugs',
   language: 'en-us',
   theme: 'system', // system, dark or light
