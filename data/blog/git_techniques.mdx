@@ -1,0 +1,120 @@
+---
+title: Some git techniques
+date: '07-21-2024'
+tags: ['version-control', 'git', 'github']
+draft: false
+summary: 'So you want to make your project open-source! GREAT'
+---
+
+## Introduction
+
+First of all thanks to Linus Torvalds for creating this amazing tool.
+Git is an essential tool for developers and also companies since it allows multiple developers to work on the same project.
+
+
+### 1. Commit Often and Use Meaningful Messages
+
+When working with Git, it is important to commit early and often. It’s easier to reverse a few changes than to track down which files were edited weeks ago. It’s also important to use descriptive commit messages that explain what has changed. A good commit message should describe the changes done with a short title that is easy to understand followed by a more detailed description if necessary.
+```bash
+# Example of a good commit message
+git commit -m "Add user authentication feature"
+
+# Example of a detailed commit message
+git commit -m "Fix login bug
+- Resolve issue with token expiration
+- Update error handling in auth service"
+
+```
+
+### 2. Use Branches Effectively
+
+Branches are an essential part of Git. They keep the development of different features separate and allow multiple developers to work at the same time. For instance you might start working on some new feature for the project so you make your own branch without affecting the current codebase.
+Branches are the most cool feature for me personally, because it give the developer a lot of flexibility. For example you added a new feature on your branch If the project maintainer does not like the feature they can easily go back to the previous branch, ain't that cool.
+
+```bash
+# Create a new branch for a feature
+git checkout -b feature/user-authentication
+
+# Merge the feature branch into the main branch
+git checkout main
+git merge feature/user-authentication
+
+# Delete the feature branch after merging
+git branch -d feature/user-authentication
+
+```
+
+### 3. Use Git Hooks
+
+Git hooks are scripts that run automatically when specific events occur, such as before or after a commit. Git hooks can be used to enforce coding standards, run tests, or perform other automated tasks. By using Git hooks, developers can save time and ensure that the codebase is always in a good state.
+
+```bash
+# Example of a pre-commit hook to check for code style
+echo 'eslint . --fix' > .git/hooks/pre-commit
+chmod +x .git/hooks/pre-commit
+
+```
+### 4. Use Git Rebase Instead of Merge
+
+Rebasing is an alternative to merging. It is a technique that rewrites the history of the branch so that it appears as if the changes were made on the same branch. Rebasing can help to keep the commit history cleaner, but it is important to use it with care. Rebasing can cause conflicts when merging into other branches, so it is essential to test and review the codebase carefully.
+
+```bash
+# Rebase the current branch onto main
+git checkout feature/user-authentication
+git rebase main
+
+# Push the rebased branch to the remote repository
+git push --force
+
+```
+
+### 5. Use Git Reflog
+
+Reflog is a tool for undoing changes. It keeps a detailed record of all Git’s changes in the repository, and developers can use it to recover previous versions of the code. Reflog is especially helpful if a developer accidentally erases an important branch or makes a mistake that requires a rollback.
+
+```bash
+# View the reflog
+git reflog
+
+# Restore a previous commit
+git reset --hard HEAD@{3}
+
+```
+
+### 6. Use Git Bisect
+
+Git Bisect is a tool that can help to find the commit that introduced a bug in the code. Developers can use Git Bisect to track down the commit in which the bug was introduced by testing the codebase at various points along the way.
+
+```bash
+# Start a bisect session
+git bisect start
+git bisect bad HEAD
+git bisect good v1.0
+
+# Git will now help you find the offending commit
+# Mark each commit as good or bad
+git bisect good/bad
+
+# End the bisect session
+git bisect reset
+
+```
+### 7. Use Git LFS
+
+Git LFS (large file storage) is a tool that tracks large files and stores them in a separate location. This is useful for developers who are working on projects that require large data files. By using Git LFS, developers can keep the file size down and ensure that the codebase is not cluttered with large files.
+
+```bash
+# Install Git LFS
+git lfs install
+
+# Track large files
+git lfs track "*.psd"
+
+# Add the .gitattributes file to the repository
+git add .gitattributes
+git commit -m "Track Photoshop files with Git LFS"
+
+```
+### Conclusion
+
+Git is a critical tool for developers, and these advanced techniques can help them to make the most of it. By using Git efficiently and effectively, developers can keep the codebase clean, ensure that dependencies are managed well, and collaborate seamlessly on multiple features. Utilizing Git’s powerful features can greatly improve workflow and improve code quality.

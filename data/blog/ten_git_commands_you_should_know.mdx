@@ -1,0 +1,185 @@
+---
+title: 10 git commands you should know
+date: '07-21-2024'
+tags: ['version-control', 'git', 'github']
+draft: false
+summary: '10 git commands which you must know as a developer.'
+---
+
+## 10 git commands you should know
+Since you are a bit familiar with git, here are 10 commands which you must know as a developer.
+
+Here are the commands which we will look into:
+
+1. git init [git init](#git-init)
+2. git clone [git clone](#git-clone)
+3. git status [git status](#git-status)
+4. git log [git log](#git-log)
+5. git branch [git branch](#git-branch)
+6. git checkout [git checkout](#git-checkout)
+7. git add [git add](#git-add)
+8. git commit [git commit](#git-commit)
+9. git push [git push](#git-push)
+10. git stash[git stash](#git-stash)
+
+1. ### git init
+This command is for starting a new repository.
+```bash
+git init [repository name]
+```
+
+##### example:
+```bash
+git init demo
+
+# output: Initialized empty Git repository in E:/Old E Drive/open-source/demo/.git/
+```
+
+### 2. git clone
+This command is like copying a file from Github to your local machine.
+```bash
+git clone [url]
+```
+#### example:
+```bash
+$ git clone https://github.com/AliSinaYOusofi/TimeTrack
+Cloning into 'TimeTrack'...
+remote: Enumerating objects: 43, done.
+remote: Counting objects: 100% (43/43), done.
+remote: Compressing objects: 100% (37/37), done.
+remote: Total 43 (delta 2), reused 39 (delta 1), pack-reused 0
+Receiving objects: 100% (43/43), 204.92 KiB | 52.00 KiB/s, done.
+Resolving deltas: 100% (2/2), done.
+```
+
+### 3. git status
+This command will list all the files which have to be commited.
+```bash
+git status
+```
+
+#### example:
+```bash
+$ git status
+On branch first_blog
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   data/blog/make_your_project_open_source.mdx
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        data/blog/git_techniques.mdx
+        data/blog/ten_git_commands_you_should_know.mdx
+
+no changes added to commit (use "git add" and/or "git commit -a")
+```
+
+### 4. git log
+This command will output a list of commits in reverse chronological order (most recent first).
+
+```bash
+git log
+```
+
+#### example:
+```bash
+commit 91a7ed71c36ab63e3153afe833e3796cb29f21ca (HEAD -> first_blog, origin/first_blog)
+Author: HajiAli <senayousofiali@gmail.com>
+Date:   Sun Jul 28 08:31:18 2024 +0430
+
+    added: another blog
+
+commit 97f730a1799c9a853350ce01727803077d1242b7
+Author: HajiAli <senayousofiali@gmail.com>
+Date:   Fri Jun 7 20:19:18 2024 +0430
+```
+
+**NOTE**: press q to exit log history.
+
+### 5. git branch
+This command lists all the local branches in the current repository.
+
+```bash
+git branch
+```
+
+#### example:
+```bash
+$ git branch
+* first_blog
+  main
+``
+
+### 5. git checkout
+This command is used when moving from one branch to another branch.
+```bash
+git checkout [branch_name]
+```
+
+#### example:
+```bash
+git checkout main
+Switched to branch 'main'
+Your branch is behind 'origin/main' by 18 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+```
+
+**NOTE**: the following command will create a new branch and swithes to that branch:
+
+```bash
+git checkout -b [branc_name]
+```
+
+### 7. git add
+This command will add file to the stagin area.
+```bash
+git add [file_name]
+
+```
+
+#### example:
+```bash
+git add ./data/blog/git_techniques.mdx
+warning: in the working copy of 'data/blog/git_techniques.mdx', CRLF will be replaced by LF the next time Git touches it
+```
+
+### 8. git commit
+This command records the file permanently in the version history.
+
+```bash
+git commit -m [commit messages]
+```
+
+#### example:
+```bash
+git commit -m "added: some new blogs"
+[master (root-commit) aff342] first commit
+9 files changed, 200 insertions(+)
+```
+
+9. git push
+This command sends the committed changes of master branch to your remote repository.
+
+```bash
+git push [a variable name] master
+
+### 10. git stash ❤️
+Firstly I love this command, it will temporarily stores all modified tracked files.
+If you modified changes and don't want to commit those changes you can stash them.
+```bash
+git stash save
+```
+
+and to restore:
+```bash
+git stash pop
+```
+
+and to list all stashed files:
+```bash
+git stash list
+```
+### 🎉🎉🎉 Thats it folks 👏👏👏
+If you know these commands, well you know git.
+
