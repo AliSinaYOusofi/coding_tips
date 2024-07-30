@@ -6,9 +6,5 @@ import siteMetadata from '@/data/siteMetadata'
 
 export default function Comments({ slug }: { slug: string }) {
   const [loadComments, setLoadComments] = useState(false)
-  return (
-    <>
-      
-    </>
-  )
+  return <p>Thanks for reading 🙏🏻</p>
 }
