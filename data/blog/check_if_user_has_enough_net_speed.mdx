@@ -1,0 +1,18 @@
+---
+title: Checking if user has enough internet speed to upload a photo
+date: '06-29-2024'
+tags: ['internet speed']
+draft: false
+summary: 'How to check if user has enough internet speed to upload a photo'
+---
+
+# Check if a user has enough internet speed for uploading a photo in JavaScript (chrome browser)
+## For chrome browser
+
+We can use the `navigator.connection` API to get the estimated data transfer rate and compare it with the size of the photo that the user wants to upload.
+
+Here is an example code snippet that checks if the user has enough internet speed to upload a photo of a certain size:
+
+![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/zhjswj33q7xq4qfw8iq9.png)
+
+In this example, we assume that the minimum required upload speed is 2 Mbps, and the photo size to upload is 5 MB (5000000 bytes). We calculate the maximum upload time in seconds based on the photo size and minimum required speed, and then calculate the maximum allowed photo size based on the estimated speed and maximum upload time. If the photo size to upload is less than or equal to the maximum allowed size, we consider that the user has enough internet speed to upload the photo. Otherwise, we consider that the user does not have enough internet speed.
