@@ -1,0 +1,21 @@
+---
+title: A timetrack chrome extension
+date: '06-28-2024'
+tags: ['chrome', 'chrome extension']
+draft: false
+summary: 'TimeTrack chrome extension'
+---
+
+## Explanation
+
+In Mongoose, when creating a schema, the `{ minimize: false }` option is used to prevent the schema from automatically removing empty objects and arrays from the document before saving it to the database.
+
+By default, Mongoose will remove any object or array from the document that has no keys or elements. This behavior is useful in many cases as it helps to keep the database tidy by removing unnecessary empty data.
+
+However, in some situations, you may want to store empty objects or arrays in the database. For example, you may want to store a user profile with an empty address field that will be filled in later. In this case, you can use the `{ minimize: false }` option when defining your schema to prevent Mongoose from removing the empty field.
+
+Here is an example of how to use `{ minimize: false }` in a Mongoose schema:
+
+![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/1zcob6amwye2op44jys4.png)
+
+In this example, the `address` field is defined as an object, and the `{ minimize: false }` option is used to prevent Mongoose from removing it if it is empty. Note that the `default` option is also used to set the `address` field to an empty object by default.
